@@ -1,35 +1,20 @@
 const gameData = [
-    { category: "Frugt", civilian: "Æble", imposter: "Pære" },
-    { category: "Transport", civilian: "Bil", imposter: "Cykel" },
-    { category: "Dyr", civilian: "Hund", imposter: "Kat" },
-    { category: "Møbler", civilian: "Sofa", imposter: "Lænestol" },
-    { category: "Vejr", civilian: "Regn", imposter: "Sne" },
-    { category: "Mad", civilian: "Pizza", imposter: "Burger" },
-    { category: "Drikke", civilian: "Kaffe", imposter: "Te" },
-    { category: "Farver", civilian: "Rød", imposter: "Orange" },
-    { category: "Tøj", civilian: "Trøje", imposter: "Jakke" },
-    { category: "Sport", civilian: "Fodbold", imposter: "Håndbold" },
-    { category: "Instrumenter", civilian: "Guitar", imposter: "Klaver" },
-    { category: "Erhverv", civilian: "Læge", imposter: "Sygeplejerske" },
-    { category: "Krop", civilian: "Hånd", imposter: "Fod" },
-    { category: "Skole", civilian: "Matematik", imposter: "Fysik" },
-    { category: "Bygninger", civilian: "Hus", imposter: "Lejlighed" },
-    { category: "Slik", civilian: "Chokolade", imposter: "Vingummi" },
-    { category: "Elektronik", civilian: "Telefon", imposter: "Tablet" },
-    { category: "Følelser", civilian: "Glad", imposter: "Sur" },
-    { category: "Landskab", civilian: "Skov", imposter: "Strand" },
-    { category: "Film", civilian: "Gyser", imposter: "Komedie" },
-    { category: "By", civilian: "København", imposter: "Aarhus" },
-    { category: "Transportmiddel", civilian: "Fly", imposter: "Tog" },
-    { category: "Sko", civilian: "Sneakers", imposter: "Støvler" },
-    { category: "Værktøj", civilian: "Hammer", imposter: "Skruetrækker" }
+    { civilian: "Kåre Smith", imposter: "J.O Smith" },
+    { civilian: "Jozef V.L.", imposter: "Bent Reuss" },
+    { civilian: "Camp", imposter: "Lejrskole" },
+    { civilian: "Tårnfalkevej", imposter: "ØK" },
+    { civilian: "Elias Pfeifer", imposter: "William Kronstad" },
+    { civilian: "Jesus", imposter: "Paulus" },
+    { civilian: "Kyle Irving", imposter: "William Gilbu" },
 ];
 
 let players = [];
 let gameSettings = {
     imposterCount: 1,
-    category: null
+    wordPair: null
 };
+
+let usedIndices = [];
 
 let gameState = {
     assignedRoles: [],
@@ -177,9 +162,13 @@ function updateStartButton() {
 }
 
 function startGame() {
-    // Select random category
-    const selectedCategoryIndex = Math.floor(Math.random() * gameData.length);
-    gameSettings.category = gameData[selectedCategoryIndex];
+    if (usedIndices.length >= gameData.length) {
+        usedIndices = [];
+    }
+    const available = gameData.map((_, i) => i).filter(i => !usedIndices.includes(i));
+    const selectedIndex = available[Math.floor(Math.random() * available.length)];
+    usedIndices.push(selectedIndex);
+    gameSettings.wordPair = gameData[selectedIndex];
     gameSettings.imposterCount = parseInt(imposterCountInput.value);
 
     assignRoles();
@@ -198,7 +187,7 @@ function assignRoles() {
         gameState.assignedRoles.push({
             name: shuffled[i],
             role: isImposter ? 'imposter' : 'civil',
-            word: isImposter ? gameSettings.category.imposter : gameSettings.category.civilian,
+            word: isImposter ? gameSettings.wordPair.imposter : gameSettings.wordPair.civilian,
             seen: false
         });
     }
@@ -248,8 +237,8 @@ function handleHideWord() {
 }
 
 function showResults() {
-    resultCivilWord.textContent = gameSettings.category.civilian;
-    resultImposterWord.textContent = gameSettings.category.imposter;
+    resultCivilWord.textContent = gameSettings.wordPair.civilian;
+    resultImposterWord.textContent = gameSettings.wordPair.imposter;
 
     resultCivils.innerHTML = '';
     resultImposters.innerHTML = '';
