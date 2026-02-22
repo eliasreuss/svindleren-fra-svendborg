@@ -221,6 +221,18 @@ function confirmIdentity(playerName) {
 function showSecretWord() {
     const player = gameState.assignedRoles[gameState.currentPlayerIndex];
     secretWordDisplay.textContent = player.word;
+
+    const len = player.word.length;
+    if (len > 16) {
+        secretWordDisplay.style.fontSize = '2rem';
+    } else if (len > 12) {
+        secretWordDisplay.style.fontSize = '2.5rem';
+    } else if (len > 8) {
+        secretWordDisplay.style.fontSize = '3rem';
+    } else {
+        secretWordDisplay.style.fontSize = '3.8rem';
+    }
+
     showStage('stage-4');
 }
 

@@ -50,6 +50,8 @@ body {
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
+    touch-action: pan-x pan-y;
+    -ms-touch-action: pan-x pan-y;
 }
 
 /* Organic Background Blobs - Simplified */
@@ -449,15 +451,14 @@ button {
     border: none;
     border-radius: var(--radius-pill);
     padding: 24px;
-    font-size: clamp(1rem, 5vw, 1.35rem);
+    font-size: 1.35rem;
     font-weight: 800;
     box-shadow: var(--shadow-soft);
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-break: normal;
+    overflow-wrap: break-word;
 }
 
 .player-card-btn:nth-child(4n+1) { background-color: var(--accent-mint); }
@@ -522,13 +523,12 @@ button {
 }
 
 .secret-word {
-    font-size: clamp(2rem, 10vw, 3.8rem);
+    font-size: 3.8rem;
     text-align: center;
     margin: 0;
-    line-height: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.1;
+    word-break: normal;
+    overflow-wrap: break-word;
 }
 
 .label {
