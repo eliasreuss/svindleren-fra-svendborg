@@ -94,11 +94,12 @@
             <div class="reveal-blob-container">
                 <div class="reveal-blob">
                     <h1 id="secret-word-display" class="secret-word">Ord</h1>
+                    <p id="imposter-message" class="imposter-message" style="display: none;">Du er Svindleren fra Svendborg!</p>
                 </div>
             </div>
             
-            <div class="info-box">
-                <p>Husk ordet og hold et ægte pokerfjæs!</p>
+            <div class="info-box" id="info-box">
+                <p id="info-box-text">Husk ordet og hold et ægte pokerfjæs!</p>
             </div>
             
             <div class="action-bar">
@@ -106,14 +107,22 @@
             </div>
         </section>
 
-        <!-- Stage 5: Spillet er i gang -->
+        <!-- Stage 5: Lucky Wheel -->
         <section id="stage-5" class="stage centered">
             <div class="game-active-content">
-                <div class="blob-icon mascot-mint large-blob">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                <h2>Hvem starter?</h2>
+                <div class="wheel-container">
+                    <div class="wheel-name" id="wheel-name"></div>
                 </div>
-                <h1>Alle har set deres ord!</h1>
-                <p>Alle har set deres ord - lad spillet begynde!</p>
+                <p id="wheel-subtitle">Finder en tilfældig spiller...</p>
+            </div>
+        </section>
+
+        <!-- Stage 6: Game Active -->
+        <section id="stage-6" class="stage centered">
+            <div class="game-active-content">
+                <h1 id="starter-name" class="starter-name"></h1>
+                <p>starter med at sige et ord</p>
             </div>
             
             <div class="action-bar">
@@ -121,22 +130,15 @@
             </div>
         </section>
 
-        <!-- Stage 6: Resultat -->
-        <section id="stage-6" class="stage">
+        <!-- Stage 7: Resultat -->
+        <section id="stage-7" class="stage">
             <header class="stage-header">
                 <h1>Resultat</h1>
             </header>
 
-            <div class="word-comparison">
-                <div class="word-col">
-                    <span class="role-label">Civile fik ordet</span>
-                    <strong id="result-civil-word" class="word-text"></strong>
-                </div>
-                <div class="vs-circle">VS</div>
-                <div class="word-col">
-                    <span class="role-label danger-text">Svindlere fik ordet</span>
-                    <strong id="result-imposter-word" class="word-text danger-text"></strong>
-                </div>
+            <div class="result-word-card">
+                <span class="role-label">Ordet var</span>
+                <strong id="result-civil-word" class="word-text"></strong>
             </div>
 
             <div class="role-lists">

@@ -531,6 +531,32 @@ button {
     overflow-wrap: break-word;
 }
 
+.imposter-message {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.4;
+    text-align: center;
+    padding: 0 8px;
+}
+
+.result-word-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-card);
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 24px;
+}
+
+.result-word-card .word-text {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    margin-top: 8px;
+}
+
 .label {
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -650,6 +676,43 @@ button {
 .imposter-card .result-list li {
     background: #FCE8E8;
     color: #E75A5A;
+}
+
+/* Lucky Wheel */
+.wheel-container {
+    width: 280px;
+    height: 280px;
+    border-radius: var(--blob-1);
+    background-color: var(--accent-yellow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 32px auto;
+    animation: morph 8s ease-in-out infinite;
+    box-shadow: var(--shadow-soft);
+}
+
+.wheel-name {
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--text-main);
+    text-align: center;
+    padding: 0 20px;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+}
+
+.wheel-container.landed {
+    background-color: var(--accent-mint);
+    transform: scale(1.05);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.starter-name {
+    font-size: 3rem;
+    color: var(--text-main);
+    margin-bottom: 8px;
 }
 
 /* Animations */

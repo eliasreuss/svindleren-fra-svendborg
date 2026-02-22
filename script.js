@@ -1,17 +1,20 @@
 const gameData = [
-    { civilian: "Kåre Smith", imposter: "J.O Smith" },
-    { civilian: "Jozef V.L.", imposter: "Bent Reuss" },
-    { civilian: "Camp", imposter: "Lejrskole" },
-    { civilian: "Tårnfalkevej", imposter: "ØK" },
-    { civilian: "Elias Pfeifer", imposter: "William Kronstad" },
-    { civilian: "Jesus", imposter: "Paulus" },
-    { civilian: "Kyle Irving", imposter: "William Gilbu" },
+    "Kåre Smith",
+    "J.O Smith",
+    "Jozef V.L.",
+    "Bent Reuss",
+    "Påskecamp",
+    "Tårnfalkevej",
+    "Elias Pfeifer",
+    "William Kronstad",
+    "Jesus",
+    "Kyle Irving",
 ];
 
 let players = [];
 let gameSettings = {
     imposterCount: 1,
-    wordPair: null
+    word: null
 };
 
 let usedIndices = [];
@@ -36,9 +39,8 @@ const secretWordDisplay = document.getElementById('secret-word-display');
 const hideWordBtn = document.getElementById('hide-word-btn');
 const revealRolesBtn = document.getElementById('reveal-roles-btn');
 const resultCivilWord = document.getElementById('result-civil-word');
-const resultImposterWord = document.getElementById('result-imposter-word');
-const resultCivils = document.getElementById('result-civils');
 const resultImposters = document.getElementById('result-imposters');
+const resultCivils = document.getElementById('result-civils');
 const newGameBtn = document.getElementById('new-game-btn');
 const decImposterBtn = document.getElementById('dec-imposter');
 const incImposterBtn = document.getElementById('inc-imposter');
@@ -47,7 +49,7 @@ const playerCountBadge = document.getElementById('player-count-badge');
 function init() {
     setupEventListeners();
     updateStartButton();
-    renderPlayerList(); // To show empty state
+    renderPlayerList();
 }
 
 function setupEventListeners() {
@@ -106,7 +108,7 @@ function addPlayer() {
 
 function shakeInput() {
     playerNameInput.style.animation = 'none';
-    playerNameInput.offsetHeight; // trigger reflow
+    playerNameInput.offsetHeight;
     playerNameInput.style.animation = 'shake 0.4s ease';
     setTimeout(() => { playerNameInput.style.animation = ''; }, 400);
 }
@@ -168,7 +170,7 @@ function startGame() {
     const available = gameData.map((_, i) => i).filter(i => !usedIndices.includes(i));
     const selectedIndex = available[Math.floor(Math.random() * available.length)];
     usedIndices.push(selectedIndex);
-    gameSettings.wordPair = gameData[selectedIndex];
+    gameSettings.word = gameData[selectedIndex];
     gameSettings.imposterCount = parseInt(imposterCountInput.value);
 
     assignRoles();
@@ -187,7 +189,6 @@ function assignRoles() {
         gameState.assignedRoles.push({
             name: shuffled[i],
             role: isImposter ? 'imposter' : 'civil',
-            word: isImposter ? gameSettings.wordPair.imposter : gameSettings.wordPair.civilian,
             seen: false
         });
     }
@@ -220,17 +221,32 @@ function confirmIdentity(playerName) {
 
 function showSecretWord() {
     const player = gameState.assignedRoles[gameState.currentPlayerIndex];
-    secretWordDisplay.textContent = player.word;
+    const revealBlob = document.querySelector('.reveal-blob');
+    const imposterMsg = document.getElementById('imposter-message');
+    const infoBoxText = document.getElementById('info-box-text');
 
-    const len = player.word.length;
-    if (len > 16) {
-        secretWordDisplay.style.fontSize = '2rem';
-    } else if (len > 12) {
-        secretWordDisplay.style.fontSize = '2.5rem';
-    } else if (len > 8) {
-        secretWordDisplay.style.fontSize = '3rem';
+    if (player.role === 'imposter') {
+        secretWordDisplay.textContent = '';
+        secretWordDisplay.style.fontSize = '';
+        imposterMsg.style.display = 'block';
+        revealBlob.style.backgroundColor = 'var(--accent-peach)';
+        infoBoxText.textContent = 'Få de andre til at tro, at du kender ordet – og gæt det selv.';
     } else {
-        secretWordDisplay.style.fontSize = '3.8rem';
+        imposterMsg.style.display = 'none';
+        secretWordDisplay.textContent = gameSettings.word;
+        revealBlob.style.backgroundColor = 'var(--accent-purple)';
+        infoBoxText.textContent = 'Husk ordet og hold et ægte pokerfjæs!';
+
+        const len = gameSettings.word.length;
+        if (len > 16) {
+            secretWordDisplay.style.fontSize = '2rem';
+        } else if (len > 12) {
+            secretWordDisplay.style.fontSize = '2.5rem';
+        } else if (len > 8) {
+            secretWordDisplay.style.fontSize = '3rem';
+        } else {
+            secretWordDisplay.style.fontSize = '3.8rem';
+        }
     }
 
     showStage('stage-4');
@@ -242,15 +258,51 @@ function handleHideWord() {
 
     if (gameState.seenCount >= players.length) {
         showStage('stage-5');
+        startWheel();
     } else {
         renderPassAroundList();
         showStage('stage-2');
     }
 }
 
+function startWheel() {
+    const wheelName = document.getElementById('wheel-name');
+    const wheelContainer = document.querySelector('.wheel-container');
+    const wheelSubtitle = document.getElementById('wheel-subtitle');
+
+    wheelContainer.classList.remove('landed');
+    wheelSubtitle.textContent = 'Finder en tilfældig spiller...';
+
+    const winner = players[Math.floor(Math.random() * players.length)];
+    const totalCycles = 20 + Math.floor(Math.random() * 10);
+    let current = 0;
+
+    function tick() {
+        const randomPlayer = players[Math.floor(Math.random() * players.length)];
+        wheelName.textContent = randomPlayer;
+        current++;
+
+        if (current >= totalCycles) {
+            wheelName.textContent = winner;
+            wheelContainer.classList.add('landed');
+            wheelSubtitle.textContent = '';
+
+            setTimeout(() => {
+                document.getElementById('starter-name').textContent = winner;
+                showStage('stage-6');
+            }, 1500);
+            return;
+        }
+
+        const delay = 60 + (current / totalCycles) * 300;
+        setTimeout(tick, delay);
+    }
+
+    tick();
+}
+
 function showResults() {
-    resultCivilWord.textContent = gameSettings.wordPair.civilian;
-    resultImposterWord.textContent = gameSettings.wordPair.imposter;
+    resultCivilWord.textContent = gameSettings.word;
 
     resultCivils.innerHTML = '';
     resultImposters.innerHTML = '';
@@ -276,7 +328,7 @@ function showResults() {
     document.getElementById('civil-count').textContent = `(${civilCount})`;
     document.getElementById('imposter-count-result').textContent = `(${imposterCount})`;
 
-    showStage('stage-6');
+    showStage('stage-7');
 }
 
 function resetToLobby() {
@@ -289,7 +341,6 @@ function resetToLobby() {
     showStage('stage-1');
 }
 
-// Inject shake animation into stylesheet
 const style = document.createElement('style');
 style.textContent = `@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }`;
 document.head.appendChild(style);
