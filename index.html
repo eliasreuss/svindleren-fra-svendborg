@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Svindleren fra Svendborg</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Organic Background Blobs -->
+    <div class="bg-decoration shape-1"></div>
+    <div class="bg-decoration shape-2"></div>
+    <div class="bg-decoration shape-3"></div>
+
+    <div id="app">
+
+        <!-- Stage 1: Startskærm -->
+        <section id="stage-1" class="stage active">
+            <header class="app-header">
+                <h1>Svindleren fra Svendborg</h1>
+            </header>
+
+            <div class="card">
+                <h2>Tilføj Spillere</h2>
+                <div class="input-row">
+                    <input type="text" id="player-name-input" placeholder="Skriv navn her" autocomplete="off" maxlength="15">
+                    <button id="add-player-btn" class="icon-btn" aria-label="Tilføj spiller">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                </div>
+                
+                <div id="player-list" class="player-chips">
+                    <!-- Chips indsat via JS -->
+                </div>
+                <span class="badge" id="player-count-badge" style="display: none;"></span>
+            </div>
+
+            <div class="card">
+                <h2>Indstillinger</h2>
+                
+                <div class="setting-row">
+                    <label for="imposter-count">Antal Svindlere</label>
+                    <div class="stepper">
+                        <button type="button" class="stepper-btn" id="dec-imposter">−</button>
+                        <input type="number" id="imposter-count" value="1" min="1" readonly>
+                        <button type="button" class="stepper-btn" id="inc-imposter">+</button>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="action-bar">
+                <button id="start-game-btn" class="primary-btn huge-btn" disabled>
+                    Start Spillet
+                </button>
+            </div>
+        </section>
+
+        <!-- Stage 2: Send Rundt -->
+        <section id="stage-2" class="stage">
+            <header class="stage-header">
+                <h2>Giv telefonen videre</h2>
+                <p>Tryk på dit navn for at se dit hemmelige ord</p>
+            </header>
+            
+            <div id="pass-around-list" class="player-grid"></div>
+        </section>
+
+        <!-- Stage 3: Sikkerhedstjek -->
+        <section id="stage-3" class="stage centered">
+            <div class="security-card">
+                <div class="blob-icon mascot-yellow">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <h2 id="security-prompt">Er du [Navn]?</h2>
+                <p>Ingen andre må kigge med nu!</p>
+                
+                <div class="button-group-vertical">
+                    <button id="confirm-identity-btn" class="primary-btn">Ja, vis mit ord</button>
+                    <button id="cancel-identity-btn" class="secondary-btn">Hov, det er ikke mig</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stage 4: Afsløringen -->
+        <section id="stage-4" class="stage centered">
+            <header class="stage-header">
+                <p class="subtitle label">Dit hemmelige ord</p>
+            </header>
+            
+            <div class="reveal-blob-container">
+                <div class="reveal-blob">
+                    <h1 id="secret-word-display" class="secret-word">Ord</h1>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <p>Husk ordet og hold et ægte pokerfjæs!</p>
+            </div>
+            
+            <div class="action-bar">
+                <button id="hide-word-btn" class="primary-btn huge-btn">Skjul ordet & send videre</button>
+            </div>
+        </section>
+
+        <!-- Stage 5: Spillet er i gang -->
+        <section id="stage-5" class="stage centered">
+            <div class="game-active-content">
+                <div class="blob-icon mascot-mint large-blob">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                </div>
+                <h1>Alle har set deres ord!</h1>
+                <p>Alle har set deres ord - lad spillet begynde!</p>
+            </div>
+            
+            <div class="action-bar">
+                <button id="reveal-roles-btn" class="secondary-btn huge-btn danger-text">Afslør roller & afslut spil</button>
+            </div>
+        </section>
+
+        <!-- Stage 6: Resultat -->
+        <section id="stage-6" class="stage">
+            <header class="stage-header">
+                <h1>Resultat</h1>
+            </header>
+
+            <div class="word-comparison">
+                <div class="word-col">
+                    <span class="role-label">Civile fik ordet</span>
+                    <strong id="result-civil-word" class="word-text"></strong>
+                </div>
+                <div class="vs-circle">VS</div>
+                <div class="word-col">
+                    <span class="role-label danger-text">Svindlere fik ordet</span>
+                    <strong id="result-imposter-word" class="word-text danger-text"></strong>
+                </div>
+            </div>
+
+            <div class="role-lists">
+                <div class="role-card civil-card">
+                    <h3>Civile <span id="civil-count" class="count"></span></h3>
+                    <ul id="result-civils" class="result-list"></ul>
+                </div>
+                <div class="role-card imposter-card">
+                    <h3 class="danger-text">Svindlere <span id="imposter-count-result" class="count"></span></h3>
+                    <ul id="result-imposters" class="result-list"></ul>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <button id="new-game-btn" class="primary-btn huge-btn">Start Nyt Spil</button>
+            </div>
+        </section>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
